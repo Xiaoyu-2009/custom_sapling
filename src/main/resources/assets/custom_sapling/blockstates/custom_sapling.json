@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "custom_sapling:block/custom_sapling"
+    }
+  }
+}
