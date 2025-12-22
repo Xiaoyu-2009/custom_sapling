@@ -2,6 +2,5 @@
   "parent": "block/cross",
   "textures": {
     "cross": "custom_sapling:block/custom_sapling"
-  },
-  "render_type": "cutout"
+  }
 }

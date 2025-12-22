@@ -1,9 +1,7 @@
 package net.xiaoyu.custom_sapling;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -16,7 +14,7 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.BlobFoliagePlac
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlacer;
 
-import java.util.Optional;
+import java.util.*;
 
 public class CustomSaplingBlock extends BushBlock implements BonemealableBlock {
     public static final IntegerProperty STAGE = BlockStateProperties.STAGE;
@@ -25,11 +23,6 @@ public class CustomSaplingBlock extends BushBlock implements BonemealableBlock {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(STAGE, Integer.valueOf(0)));
     }
-
-    @Override
-    protected MapCodec<? extends BushBlock> codec() {
-        return simpleCodec(CustomSaplingBlock::new);
-    }
     
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
@@ -37,17 +30,17 @@ public class CustomSaplingBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+    public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean isClient) {
         return true;
     }
 
     @Override
-    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+    public boolean isBonemealSuccess(Level level, Random random, BlockPos pos, BlockState state) {
         return true;
     }
     
     @Override
-    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+    public void performBonemeal(ServerLevel level, Random random, BlockPos pos, BlockState state) {
         this.growTree(level, pos, state, random);
     }
     
@@ -55,19 +48,20 @@ public class CustomSaplingBlock extends BushBlock implements BonemealableBlock {
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         return true;
     }
-    
+
+    @SuppressWarnings("deprecation")
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
         if (state.getValue(STAGE) == 0) {
             level.setBlock(pos, state.setValue(STAGE, Integer.valueOf(1)), 4);
         } else {
             this.growTree(level, pos, state, random);
         }
-        
+
         super.randomTick(state, level, pos, random);
     }
 
-    public void growTree(ServerLevel level, BlockPos pos, BlockState state, RandomSource random) {
+    public void growTree(ServerLevel level, BlockPos pos, BlockState state, Random random) {
         BlockPos belowPos = pos.below();
         BlockState belowState = level.getBlockState(belowPos);
         BlockPos belowBelowPos = belowPos.below();
