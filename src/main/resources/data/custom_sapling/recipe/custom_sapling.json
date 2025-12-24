@@ -1,12 +1,8 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    {
-      "tag": "minecraft:saplings"
-    },
-    {
-      "item": "minecraft:gold_nugget"
-    }
+    "#minecraft:saplings",
+    "minecraft:gold_nugget"
   ],
   "result": {
     "id": "custom_sapling:custom_sapling",

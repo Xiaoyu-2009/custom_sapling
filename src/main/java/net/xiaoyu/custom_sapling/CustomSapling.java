@@ -17,16 +17,15 @@ public class CustomSapling {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MOD_ID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
     
-    public static final DeferredBlock<Block> CUSTOM_SAPLING = BLOCKS.register("custom_sapling", 
-        () -> new CustomSaplingBlock(
-            BlockBehaviour.Properties.of()
-                .mapColor(MapColor.PLANT)
-                .noCollission()
-                .randomTicks()
-                .instabreak()
-                .sound(SoundType.GRASS)
-                .pushReaction(PushReaction.DESTROY)
-        )
+    public static final DeferredBlock<CustomSaplingBlock> CUSTOM_SAPLING = BLOCKS.registerBlock("custom_sapling", 
+        CustomSaplingBlock::new,
+        BlockBehaviour.Properties.of()
+            .mapColor(MapColor.PLANT)
+            .noCollission()
+            .randomTicks()
+            .instabreak()
+            .sound(SoundType.GRASS)
+            .pushReaction(PushReaction.DESTROY)
     );
     
     public static final DeferredItem<BlockItem> CUSTOM_SAPLING_ITEM = ITEMS.registerSimpleBlockItem("custom_sapling", CUSTOM_SAPLING);
